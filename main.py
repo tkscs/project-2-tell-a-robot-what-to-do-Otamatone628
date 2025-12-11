@@ -7,6 +7,8 @@ from simulator import robot, FORWARD, BACKWARD, STOP
 # When you're done, close the simulator
 state = "waiting"
 on = True
+def error_message() :
+    print("This is an error message, please input one of the options")
 
 def sim_ready() :
     action = input("Would you like to check the sonar (...), move (m), or quit (q)?")
@@ -16,22 +18,25 @@ def sim_ready() :
     elif action == "m" :
         movement_pattern = input("Would you like to control the robot (c), or send it on a predetermined path (p)?")
     elif action == "q" :
+        state == "quit"
         on == False
-    
-
-
+    else :
+        error_message
 
 while on == True:
-    where = input("Would you like to run the robot in the simulator (s) or in real life (r)?")
+    where = input("Sorry! Please respond again! Would you like to run the robot in the simulator (s), in real life (r), or quit (q)?")
     if where == "r" :
         state = "robot_ready"
         robot_ready()
     elif where == "s" :
         state = "sim_ready"
         sim_ready()
+    elif where == "q" :
+        break
     else:
-        #TODO
+        error_message
 
-
+while state == sim_ready :
+    sim_ready()
 
 robot.exit()
