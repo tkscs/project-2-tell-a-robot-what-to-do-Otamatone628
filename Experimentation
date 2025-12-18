@@ -1,0 +1,84 @@
+from simulator import robot, FORWARD, BACKWARD, STOP
+
+# TODO: Write your code here!
+# Use robot.motors() to move
+# Use robot.left_sonar() and robot.right_sonar() to sense obstacles
+
+# When you're done, close the simulator
+state = "waiting"
+on = True
+control = False
+good = True
+def error_message() :
+    print("This is an error message, please input one of the options")
+
+def check_sonar():
+    '''
+    This function does stuff
+    Params:
+        x: (int) = num of stuff
+    '''
+    print("Left: ", robot.left_sonar())
+    print("Right: ", robot.right_sonar())
+
+def use_sonar_drive():
+    if robot.left_sonar <= 2.50 :
+        robot.motors(left=BACKWARD, right=BACKWARD, seconds=1)
+        robot.motors(left=STOP, right=STOP, seconds=0.1)
+        print("You are about to hit a wall on your left, please don't.")
+    elif robot.right_sonar <= 2.50 :
+        robot.motors(left=BACKWARD, right=BACKWARD, seconds=1)
+        robot.motors(left=STOP, right=STOP, seconds=0.1)
+        print("You are about to hit a wall on your right, please don't.")
+
+    else: 
+        global good
+        good = True
+
+def use_sonar_path() :
+    if robot.left_sonar <= 1.00 :
+        robot.motors(left=BACKWARD, right=BACKWARD, seconds=1)
+        robot.motors(left=STOP, right=STOP, seconds=0.1)
+    elif robot.right_sonar <= 1.00 :
+        robot.motors(left=BACKWARD, right=BACKWARD, seconds=1)
+        robot.motors(left=STOP, right=STOP, seconds=0.1)
+    else: 
+        global good
+        good = True
+
+def controller() :
+    while control == True :
+        what_to_do = input("Would you like to go (g) , check sonar (...), or quit (q)?")
+        if what_to_do == "g" :
+            left_power = int(input("Left motor: "))
+            right_power = int(input("Right motor: "))
+            seconds = int(input("Seconds: "))
+
+            robot.motors(left = left_power, right = right_power, seconds = seconds)
+        elif what_to_do == "..." :
+            check_sonar()
+            use_sonar_drive()
+        elif what_to_do == "q" :
+            exit
+
+
+
+
+while on == True:
+    action = input("Would you like to check the sonar (...), move (m), or quit (q)?")
+    if action == "..." :
+        check_sonar()
+    elif action == "m" :
+        movement_pattern = input("Would you like to control the robot (c), or send it on a predetermined path (p)?")
+        while movement_pattern == "c" :
+            control = True
+            controller()
+    elif action == "q" :
+        state == "quit"
+        on == False
+        break
+    else :
+        error_message
+
+
+robot.exit()
